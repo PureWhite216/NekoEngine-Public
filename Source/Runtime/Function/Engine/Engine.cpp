@@ -176,22 +176,24 @@ namespace NekoEngine
         input = MakeUnique<Input>();
         LOG("Input Manager Init.");
 
-        // Create Job System
-        JobSystem::Context context;
+        // Job System
+//        JobSystem::Context context;
+//
+//        JobSystem::Execute(context, [this](JobDispatchArgs args)
+//        {
+//            systemManager->RegisterSystem<PhysicsEngine>();
+//        });
+//
+//        JobSystem::Execute(context, [this](JobDispatchArgs args)
+//        {
+//            levelManager->LoadCurrentList();
+//        });
+//
+//        JobSystem::Wait(context);
 
-        JobSystem::Execute(context, [this](JobDispatchArgs args)
-        {
-            systemManager->RegisterSystem<PhysicsEngine>();
-        });
         systemManager->RegisterSystem<PhysicsEngine>();
+        levelManager->LoadCurrentList();
 
-        JobSystem::Execute(context, [this](JobDispatchArgs args)
-        {
-            levelManager->LoadCurrentList();
-        });
-//        levelManager->LoadCurrentList();
-
-        JobSystem::Wait(context);
 
         LOG("Job System Done.");
 

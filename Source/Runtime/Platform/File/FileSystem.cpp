@@ -45,13 +45,13 @@ namespace NekoEngine
 
     bool FileSystem::FileExists(const std::string &path)
     {
-        DWORD dwAttrib = GetFileAttributes(reinterpret_cast<LPCSTR>(StringToWString(path).c_str()));
+        DWORD dwAttrib = GetFileAttributesW(reinterpret_cast<LPCWSTR>(StringToWString(path).c_str()));
         return (dwAttrib != INVALID_FILE_ATTRIBUTES) && (dwAttrib & FILE_ATTRIBUTE_DIRECTORY) == 0;
     }
 
     bool FileSystem::FolderExists(const std::string &path)
     {
-        DWORD dwAttrib = GetFileAttributes(reinterpret_cast<LPCSTR>(StringToWString(path).c_str()));
+        DWORD dwAttrib = GetFileAttributesW(reinterpret_cast<LPCWSTR>(StringToWString(path).c_str()));
         return dwAttrib != INVALID_FILE_ATTRIBUTES && (dwAttrib & FILE_ATTRIBUTE_DIRECTORY) != 0;
     }
 

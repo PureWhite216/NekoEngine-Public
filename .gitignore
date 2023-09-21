@@ -4,3 +4,10 @@
 /Editor.ini
 /.xmake/
 /build/
+/CMakeLists.txt
+/compile.NekoEngine.pdb
+/compile_commands.json
+/NekoEngine.ilk
+/NekoEngine.pdb
+/.vscode/
+/cmake-build-debug/

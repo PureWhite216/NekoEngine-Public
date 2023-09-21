@@ -361,7 +361,7 @@ namespace NekoEngine
     {
         if(mipMaps.find(mipLevel) == mipMaps.end())
         {
-            mipMaps.at(mipLevel) = CreateImageView(image, vkFormat, 1, VK_IMAGE_VIEW_TYPE_2D, VK_IMAGE_ASPECT_COLOR_BIT,
+            mipMaps[mipLevel] = CreateImageView(image, vkFormat, 1, VK_IMAGE_VIEW_TYPE_2D, VK_IMAGE_ASPECT_COLOR_BIT,
                                                    1,
                                                    0, mipLevel);
         }

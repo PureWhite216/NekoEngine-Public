@@ -138,6 +138,18 @@ namespace NekoEngine
         void Load(uint32_t mips);
 
         const VkImageView& GetImageView() const { return imageView; }
+        //TODO: !!! deal witch mipmaps
+        VkImageView GetImageView(uint32_t layer) const
+        {
+            return imageView;
+        }
+
+        VkImageView GetImageView(uint32_t layer, uint32_t mip) const
+        {
+            return imageView;
+        }
+
+
         const VkSampler& GetSampler() const { return sampler; }
         const VkDescriptorImageInfo* GetDescriptor() const { return &descriptor; }
         const VkImage& GetImage() const { return image; }

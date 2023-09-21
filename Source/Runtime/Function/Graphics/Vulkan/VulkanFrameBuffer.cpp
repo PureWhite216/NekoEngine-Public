@@ -21,18 +21,18 @@ namespace NekoEngine
                 case TextureType::COLOUR:
                     attachments.push_back(desc.mipIndex >= 0 ? dynamic_cast<VulkanTexture2D*>(desc.attachments[i])->GetMipImageView(desc.mipIndex) : dynamic_cast<VulkanTexture2D*>(desc.attachments[i])->GetImageView());
                     break;
-//                case TextureType::DEPTH:
-//                    attachments.push_back(static_cast<VulkanTextureDepth*>(desc.attachments[i])->GetImageView());
-//                    break;
-//                case TextureType::DEPTHARRAY:
-//                    attachments.push_back(static_cast<VulkanTextureDepthArray*>(desc.attachments[i])->GetImageView(desc.layer));
-//                    break;
-//                case TextureType::OTHER:
-//                    attachments.push_back(static_cast<VulkanTexture2D*>(desc.attachments[i])->GetImageView());
-//                    break;
-//                case TextureType::CUBE:
-//                    attachments.push_back(static_cast<VulkanTextureCube*>(desc.attachments[i])->GetImageView(desc.layer));
-//                    break;
+                case TextureType::DEPTH:
+                    attachments.push_back(dynamic_cast<VulkanTextureDepth*>(desc.attachments[i])->GetImageView());
+                    break;
+                case TextureType::DEPTHARRAY:
+                    attachments.push_back(dynamic_cast<VulkanTextureDepthArray*>(desc.attachments[i])->GetImageView(desc.layer));
+                    break;
+                case TextureType::OTHER:
+                    attachments.push_back(dynamic_cast<VulkanTexture2D*>(desc.attachments[i])->GetImageView());
+                    break;
+                case TextureType::CUBE:
+                    attachments.push_back(desc.mipIndex >= 0 ? dynamic_cast<VulkanTextureCube*>(desc.attachments[i])->GetImageView(desc.layer, desc.mipIndex) : dynamic_cast<VulkanTextureCube*>(desc.attachments[i])->GetImageView(desc.layer));
+                    break;
             }
 
             VkFramebufferCreateInfo framebufferInfo = {};
