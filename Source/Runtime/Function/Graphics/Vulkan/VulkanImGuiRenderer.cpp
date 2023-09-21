@@ -1,16 +1,14 @@
+#include "VulkanImGuiRenderer.h"
+#include "ImGui/imgui.h"
 #define IMGUI_IMPL_VULKAN_NO_PROTOTYPES
 #define VK_NO_PROTOTYPES
-
-#include "VulkanImGuiRenderer.h"
-#include "VulkanRenderer.h"
-#include "ImGui/imgui.h"
 #include "ImGui/imgui_impl_vulkan.h"
 #include "VulkanDevice.h"
-
+#include "VulkanRenderer.h"
 
 static ImGui_ImplVulkanH_Window g_WindowData;
 static VkAllocationCallbacks* g_Allocator = nullptr;
-static VkDescriptorPool g_DescriptorPool = VK_NULL_HANDLE;
+static VkDescriptorPool g_DescriptorPool = nullptr;
 
 
 static void check_vk_result(VkResult err)
