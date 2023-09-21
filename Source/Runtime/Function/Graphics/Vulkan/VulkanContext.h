@@ -45,6 +45,8 @@ namespace NekoEngine
         std::vector<const char*> m_InstanceLayerNames;
         std::vector<const char*> m_InstanceExtensionNames;
 
+        VkDebugReportCallbackEXT m_DebugCallback = VK_NULL_HANDLE;
+
     protected:
         static const std::vector<const char*> GetRequiredExtensions();
         const std::vector<const char*> GetRequiredLayers() const;
@@ -56,6 +58,16 @@ namespace NekoEngine
         void Init() override;
         void Present() override;
         void WaitIdle() const override;
+        void SetupDebugCallback();
+
+        static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(VkDebugReportFlagsEXT flags,
+                                                            VkDebugReportObjectTypeEXT objType,
+                                                            uint64_t sourceObj,
+                                                            size_t location,
+                                                            int32_t msgCode,
+                                                            const char* pLayerPrefix,
+                                                            const char* pMsg,
+                                                            void* userData);
 
         size_t GetMinUniformBufferOffsetAlignment() const override;
 

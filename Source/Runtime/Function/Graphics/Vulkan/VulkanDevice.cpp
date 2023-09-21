@@ -199,7 +199,7 @@ namespace NekoEngine
 //        std::vector<const char*> deviceExtensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
 
         std::vector<const char*> deviceExtensions = {
-                VK_KHR_SWAPCHAIN_EXTENSION_NAME
+                VK_KHR_SWAPCHAIN_EXTENSION_NAME,
         };
 
 //        deviceExtensions.push_back("VK_KHR_surface");
