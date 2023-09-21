@@ -13,7 +13,7 @@ namespace NekoEngine
     public:
         explicit GLFWWindow(const CreateInfo& properties);
         ~GLFWWindow() override;
-        bool Init();
+        bool Init(const CreateInfo& properties);
         bool ShouldExit() override;
         void ToggleVSync() override;
         void SetVSync(bool set) override;

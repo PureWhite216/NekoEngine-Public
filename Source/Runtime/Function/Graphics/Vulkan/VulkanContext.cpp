@@ -5,7 +5,7 @@
 #include "Engine.h"
 #include "vulkan/vulkan_win32.h"
 #include "VulkanRenderer.h"
-
+#include "VulkanUtility.h"
 #define VK_LAYER_LUNARG_STANDARD_VALIDATION_NAME "VK_LAYER_LUNARG_standard_validation"
 #define VK_LAYER_LUNARG_ASSISTENT_LAYER_NAME "VK_LAYER_LUNARG_assistant_layer"
 #define VK_LAYER_LUNARG_VALIDATION_NAME "VK_LAYER_KHRONOS_validation"
@@ -180,13 +180,30 @@ namespace NekoEngine
         m_InstanceLayerNames     = GetRequiredLayers();
         m_InstanceExtensionNames = GetRequiredExtensions();
 
+
         VkApplicationInfo appInfo = {};
+
+        uint32_t sdkVersion    = VK_HEADER_VERSION_COMPLETE;
+        uint32_t driverVersion = 0;
+        auto enumerateInstanceVersion = reinterpret_cast<PFN_vkEnumerateInstanceVersion>(vkGetInstanceProcAddr(nullptr, "vkEnumerateInstanceVersion"));
+
+        if(enumerateInstanceVersion)
+        {
+            enumerateInstanceVersion(&driverVersion);
+        }
+        else
+        {
+            driverVersion = VK_API_VERSION_1_0;
+        }
+
+        appInfo.apiVersion = Maths::Min(sdkVersion, driverVersion);
+
         appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
         appInfo.pApplicationName = "NekoEngine";
         appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
         appInfo.pEngineName = "NekoEngine";
         appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-        appInfo.apiVersion = VK_API_VERSION_1_0;
+
 
         VkInstanceCreateInfo createInfo = {};
         createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
@@ -206,6 +223,8 @@ namespace NekoEngine
         }
 
         volkLoadInstance(vkInstance);
+
+//        VulkanUtility::Init();
     }
 
     size_t VulkanContext::GetMinUniformBufferOffsetAlignment() const

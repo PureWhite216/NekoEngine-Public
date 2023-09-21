@@ -20,7 +20,7 @@ namespace NekoEngine
         isFullscreen = createInfo.isFullscreen;
         title = createInfo.title;
 
-        Init();
+        Init(createInfo);
 
         gVulkanContext.Init();
         graphicsContext = &gVulkanContext;
@@ -35,7 +35,12 @@ namespace NekoEngine
         glfwTerminate();
     }
 
-    bool GLFWWindow::Init()
+    static void GLFWErrorCallback(int error, const char* description)
+    {
+        LOG_FORMAT("GLFW Error %d : %s", error, description);
+    }
+
+    bool GLFWWindow::Init(const Window::CreateInfo &properties)
     {
         LOG("Initializing GLFW window");
         static bool isGLFWInitialized = false;
@@ -43,16 +48,18 @@ namespace NekoEngine
         if(!isGLFWInitialized)
         {
             glfwInit();
-            glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-            glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+            glfwSetErrorCallback(GLFWErrorCallback);
             isGLFWInitialized = true;
         }
+
 
         GLFWmonitor* monitor = glfwGetPrimaryMonitor();
         float xScale, yScale;
         glfwGetMonitorContentScale(monitor, &xScale, &yScale);
+        windowData.DPIScale = xScale;
 
         //TODO Set borderless window
+//        SetBorderlessWindow(properties.Borderless);
 
         const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
@@ -61,6 +68,14 @@ namespace NekoEngine
             width = mode->width;
             height = mode->height;
         }
+
+        windowData.Title = title;
+        windowData.Width = width;
+        windowData.Height = height;
+        windowData.VSync = isVSync;
+        windowData.Exit = false;
+
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
         windowHandle = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
         if(!windowHandle)

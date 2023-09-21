@@ -62,7 +62,7 @@ namespace NekoEngine
     public:
         virtual ~Window();
 
-        virtual bool Init() = 0;
+        virtual bool Init(const CreateInfo& properties) = 0;
         bool IsInit() { return isInit; };
 
         virtual void OnUpdate() = 0;

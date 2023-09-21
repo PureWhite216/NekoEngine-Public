@@ -215,7 +215,7 @@ namespace NekoEngine
         {
             throw std::runtime_error("failed to create window surface!");
         }
-        if(glfwCreateWindowSurface(gVulkanContext.GetVkInstance(), static_cast<GLFWwindow*>(window->GetHandle()), nullptr, &surface) != VK_SUCCESS)
+        if(glfwCreateWindowSurface(gVulkanContext.GetVkInstance(), (GLFWwindow*)(window->GetHandle()), nullptr, &surfaceKHR) != VK_SUCCESS)
         {
             throw std::runtime_error("failed to create window surface!");
         }
