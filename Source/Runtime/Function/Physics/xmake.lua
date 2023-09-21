@@ -1,0 +1,11 @@
+target("Physics")
+    add_deps("Core")
+    set_kind("static")
+    add_files(
+    "/*.cpp",
+    "Collision/*.cpp",
+    "Detection/BroadPhase/*.cpp",
+    "Detection/NarrowPhase/*.cpp",
+    "Detection/Constraint/*.cpp",
+    "/RigidBody/*.cpp"
+    )

@@ -1,0 +1,6 @@
+-- add_includedirs("../Engine")
+target("NekoEngine")
+    set_kind("binary")
+    set_targetdir("../../..//")
+    add_deps("Function", "Editor")
+    add_files("/*.cpp")

@@ -1,0 +1,6 @@
+add_includedirs("/")
+add_requires("vulkansdk")
+target("ImGui")
+    set_kind("static")
+    add_packages("vulkansdk")
+    add_files("/*.cpp", "Plugins/*.cpp", "Plugins/implot/*.cpp")
