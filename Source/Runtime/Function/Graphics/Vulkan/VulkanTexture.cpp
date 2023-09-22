@@ -400,7 +400,7 @@ namespace NekoEngine
 
         if(data == nullptr)
         {
-            pixels = ImageLoader::LoadImageFromFile(fileName, &width, &height, &bits, nullptr, false, params.srgb);
+            pixels = ImageLoader::LoadImageFromFile(fileName, &width, &height, &bits);
             if(pixels == nullptr)
             {
                 LOG("Could not load image!");
@@ -431,16 +431,18 @@ namespace NekoEngine
             mipMapLevels = 1;
         }
 
+        auto t_StagingBuffer = new VulkanBuffer(VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT,
+                                                static_cast<uint32_t>(imageSize), pixels);
+
         if(data == nullptr)
         {
-            CreateImage(width, height, mipMapLevels, vkFormat, VK_IMAGE_TYPE_2D, VK_IMAGE_TILING_OPTIMAL,
+            delete[] pixels;
+        }
+
+        CreateImage(width, height, mipMapLevels, vkFormat, VK_IMAGE_TYPE_2D, VK_IMAGE_TILING_OPTIMAL,
                         VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT |
                         VK_IMAGE_USAGE_STORAGE_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, image,
                         imageMemory, 1, 0, allocation);
-        }
-
-        auto t_StagingBuffer = new VulkanBuffer(VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT,
-                                                static_cast<uint32_t>(imageSize), pixels);
 
         VulkanUtility::TransitionImageLayout(image, vkFormat, VK_IMAGE_LAYOUT_UNDEFINED,
                                              VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, mipMapLevels);

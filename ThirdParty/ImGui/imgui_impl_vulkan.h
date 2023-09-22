@@ -37,13 +37,14 @@
 //     - Do not simply add it in a .cpp file!
 // (2) Call ImGui_ImplVulkan_LoadFunctions() before ImGui_ImplVulkan_Init() with your custom function.
 // If you have no idea what this is, leave it alone!
-//#define IMGUI_IMPL_VULKAN_NO_PROTOTYPES
+#define IMGUI_IMPL_VULKAN_NO_PROTOTYPES
 
 // Vulkan includes
 #if defined(IMGUI_IMPL_VULKAN_NO_PROTOTYPES) && !defined(VK_NO_PROTOTYPES)
 #define VK_NO_PROTOTYPES
 #endif
-#include <vulkan/vulkan.h>
+//#include <vulkan/vulkan.h>
+#include "volk/volk.h"
 #include <unordered_map>
 
 // Initialization data, for ImGui_ImplVulkan_Init()

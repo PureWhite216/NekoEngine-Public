@@ -14,7 +14,7 @@ namespace NekoEngine
     public:
         struct CreateInfo
         {
-            explicit CreateInfo(uint32_t width = 1280, uint32_t height = 720, int renderAPI = 0, String title = "NekoEngine",
+            explicit CreateInfo(uint32_t width = 1600, uint32_t height = 900, int renderAPI = 0, String title = "NekoEngine",
                        bool fullscreen = false, bool vSync = true, bool borderless = false)
                     : width(width), height(height), isFullscreen(fullscreen), isVSync(vSync), isBorderless(borderless),
                       title(std::move(title))

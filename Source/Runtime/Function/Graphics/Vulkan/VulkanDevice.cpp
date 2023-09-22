@@ -293,6 +293,7 @@ namespace NekoEngine
 
     VulkanDevice::~VulkanDevice()
     {
+        LOG("Destroying Vulkan device");
         commandPool.reset();
         vkDestroyPipelineCache(handle, pipelineCache, nullptr);
         vmaDestroyAllocator(allocator);

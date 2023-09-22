@@ -77,7 +77,7 @@ namespace NekoEngine
             swapChainPresentMode = VK_PRESENT_MODE_IMMEDIATE_KHR;
         }
 
-        swapChainBufferNum = Maths::Max(MAX_BUFFER_COUNT, (int)surfaceCapabilities.maxImageCount);
+        swapChainBufferNum = Maths::Min(MAX_BUFFER_COUNT, (int)surfaceCapabilities.maxImageCount);
 
         VkSurfaceTransformFlagBitsKHR preTransform;
         if(surfaceCapabilities.supportedTransforms & VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR)

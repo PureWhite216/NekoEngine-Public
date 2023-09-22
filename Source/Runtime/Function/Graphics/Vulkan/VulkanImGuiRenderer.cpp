@@ -175,18 +175,16 @@ namespace NekoEngine
         init_info.MinImageCount = 2;
         init_info.ImageCount = (uint32_t) gVulkanContext.GetSwapChain()->GetSwapChainBufferCount();
         ImGui_ImplVulkan_Init(&init_info, wd->RenderPass);
+
         // Upload Fonts
-        {
-            ImGuiIO &io = ImGui::GetIO();
+        ImGuiIO &io = ImGui::GetIO();
 
-            unsigned char* pixels;
-            int width, height;
-            io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
+        unsigned char* pixels;
+        int width, height;
+        io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
+        m_FontTexture = new VulkanTexture2D(width, height, pixels, TextureDesc(TextureFilter::NEAREST, TextureFilter::NEAREST));
+        io.Fonts->TexID = (ImTextureID) m_FontTexture->GetHandle();
 
-            m_FontTexture = new VulkanTexture2D(width, height, pixels,
-                                                TextureDesc(TextureFilter::NEAREST, TextureFilter::NEAREST));
-            io.Fonts->TexID = (ImTextureID) m_FontTexture->GetHandle();
-        }
     }
 
     void VulkanImGuiRenderer::FrameRender(ImGui_ImplVulkanH_Window* wd)

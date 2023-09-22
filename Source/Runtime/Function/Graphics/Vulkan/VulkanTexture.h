@@ -14,16 +14,16 @@ namespace NekoEngine
     class VulkanTexture2D : virtual public Texture2D
     {
     protected:
-        VkImage image;
+        VkImage image = VK_NULL_HANDLE;
         VkImageLayout imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;;
-        VkImageView imageView;
+        VkImageView imageView = VK_NULL_HANDLE;
         VkFormat vkFormat = VK_FORMAT_R8G8B8A8_UNORM;
-        VkSampler sampler;
-        VkDeviceMemory imageMemory;
-        VkDescriptorImageInfo descriptor;
+        VkSampler sampler = VK_NULL_HANDLE;
+        VkDeviceMemory imageMemory = VK_NULL_HANDLE;
+        VkDescriptorImageInfo descriptor = {};
         HashMap<uint32_t, VkImageView> mipMaps;
-        VulkanBuffer* stagingBuffer;
-        VmaAllocation allocation;
+        VulkanBuffer* stagingBuffer = nullptr;
+        VmaAllocation allocation = VK_NULL_HANDLE;
         bool isDeleteImage;
     public:
         VulkanTexture2D() = default;

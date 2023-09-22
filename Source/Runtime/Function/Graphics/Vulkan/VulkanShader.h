@@ -47,12 +47,15 @@ namespace NekoEngine
         VkShaderModule& GetHandle() { return handle; };
         VkPipelineLayout& GetPipelineLayout() { return pipelineLayout; };
 
-        const ArrayList<VkDescriptorSetLayout>& GetDescriptorSetLayouts() const { return descriptorSetLayouts; }
+//        const ArrayList<VkDescriptorSetLayout>& GetDescriptorSetLayouts() const { return descriptorSetLayouts; }
         const ArrayList<DescriptorLayoutInfo>& GetDescriptorLayoutInfos() const { return descriptorLayoutInfos; }
         VkDescriptorSetLayout* GetDescriptorLayout(int id)
         {
             return &descriptorSetLayouts[id];
         };
+
+        const std::vector<VkDescriptorSetLayout>& GetDescriptorLayouts() const { return descriptorSetLayouts; }
+
 
         DescriptorSetInfo GetDescriptorInfo(uint32_t index) override
         {

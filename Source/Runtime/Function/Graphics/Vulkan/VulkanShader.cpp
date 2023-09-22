@@ -9,6 +9,7 @@
 #include "VulkanCommandBuffer.h"
 #include "VulkanContext.h"
 #include "spirv_cross/spirv_cross.hpp"
+#include "VulkanInitializer.h"
 
 
 namespace NekoEngine
@@ -376,6 +377,12 @@ namespace NekoEngine
             HashCombine(hash, filePath + file.second);
             uint32_t fileSize = uint32_t(FileSystem::GetFileSize(filePath + file.second));
             uint32_t* source = reinterpret_cast<uint32_t*>(FileSystem::ReadFile(filePath + file.second));
+            if(source)
+            {
+                LoadFromData(source, fileSize, file.first, currentShaderStage);
+                currentShaderStage++;
+                delete[] source;
+            }
         }
 
         if(shaderFiles.empty())
@@ -450,6 +457,26 @@ namespace NekoEngine
 
             descriptorSetLayouts.push_back(layout);
         }
+
+        const auto& pushConsts = GetPushConstants();
+        std::vector<VkPushConstantRange> pushConstantRanges;
+
+        for(auto& pushConst : pushConsts)
+        {
+            pushConstantRanges.push_back(VKInitialisers::PushConstantRange(VulkanUtility::ShaderTypeToVK(pushConst.shaderStage), pushConst.size, pushConst.offset));
+        }
+
+        auto& tDescriptorSetLayouts = GetDescriptorLayouts();
+
+        VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo = {};
+        pipelineLayoutCreateInfo.sType                      = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+        pipelineLayoutCreateInfo.setLayoutCount             = static_cast<uint32_t>(tDescriptorSetLayouts.size());
+        pipelineLayoutCreateInfo.pSetLayouts                = tDescriptorSetLayouts.data();
+        pipelineLayoutCreateInfo.pushConstantRangeCount     = uint32_t(pushConstantRanges.size());
+        pipelineLayoutCreateInfo.pPushConstantRanges        = pushConstantRanges.data();
+
+        VK_CHECK_RESULT(vkCreatePipelineLayout(GET_DEVICE(), &pipelineLayoutCreateInfo, VK_NULL_HANDLE, &pipelineLayout), "Failed to create pipeline layout");
+
     }
 
     void VulkanShader::ParseShaderFile(const std::vector<std::string> &lines, std::map<ShaderType, String>* shaders)

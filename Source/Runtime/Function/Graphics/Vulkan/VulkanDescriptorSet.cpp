@@ -18,8 +18,7 @@ namespace NekoEngine
         VkDescriptorSetAllocateInfo descriptorSetAllocateInfo;
         descriptorSetAllocateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
         descriptorSetAllocateInfo.descriptorPool = VulkanRenderer::GetDescriptorPool();
-        descriptorSetAllocateInfo.pSetLayouts = dynamic_cast<VulkanShader*>(descriptorDesc.shader)->GetDescriptorLayout(
-                descriptorDesc.layoutIndex);
+        descriptorSetAllocateInfo.pSetLayouts = dynamic_cast<VulkanShader*>(descriptorDesc.shader)->GetDescriptorLayout(descriptorDesc.layoutIndex);
         descriptorSetAllocateInfo.descriptorSetCount = descriptorDesc.count;
         descriptorSetAllocateInfo.pNext = nullptr;
 
@@ -58,8 +57,7 @@ namespace NekoEngine
             m_DescriptorUpdated[frame] = false;
             m_DescriptorSet[frame] = nullptr;
             g_DescriptorSetCount++;
-            VK_CHECK_RESULT(vkAllocateDescriptorSets(GET_DEVICE(), &descriptorSetAllocateInfo, &m_DescriptorSet[frame]),
-                            "Failed to allocate descriptor set!");
+            VK_CHECK_RESULT(vkAllocateDescriptorSets(GET_DEVICE(), &descriptorSetAllocateInfo, &m_DescriptorSet[frame]), "Failed to allocate descriptor set!");
         }
     }
 
