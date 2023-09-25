@@ -13,13 +13,19 @@ This project is built with [Xmake](https://xmake.io/#/about/introduction).
 
 It only supports **Windows** platform currently.
 
-### 1. Install Xmake
+### 1. Install VulkanSDK
+
+[Download the latest version](https://vulkan.lunarg.com/sdk/home#windows)
+
+You should add **Volk Header** and **Vulkan Memory Allocation Header** when you install.
+
+### 2. Install Xmake
 
 [Installation - xmake](https://xmake.io/#/guide/installation)
 
 On Windows，you can download the installer here: [Releases · xmake-io/xmake (github.com)](https://github.com/xmake-io/xmake/releases)
 
-### 2. Run Xmake
+### 3. Run Xmake
 
 You can download xmake plugin in your IDE(VScode, Clion...), and click "Build".
 
@@ -29,7 +35,7 @@ Or you can use the command:
 xmake f -y -p windows -a x64 -m debug
 ```
 
-### 3. Run the application
+### 4. Run the Application
 
 ```
 xmake run
