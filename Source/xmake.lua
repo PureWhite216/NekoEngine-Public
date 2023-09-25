@@ -1,7 +1,7 @@
 add_deps("ImGui")
 
-add_requires("glfw", "glad", "glm", "vulkansdk", "stb", "cereal", "entt", "volk", "vulkan-memory-allocator-hpp", "sol2", "spdlog", "meshoptimizer", "spirv-cross")
-add_packages("glfw", "glad", "glm", "vulkansdk", "stb", "cereal", "entt", "volk", "vulkan-memory-allocator-hpp", "sol2", "spdlog", "meshoptimizer", "spirv-cross")
+add_requires("glfw", "glad", "glm", "vulkansdk", "stb", "cereal", "entt", "volk", "vulkan-memory-allocator-hpp", "sol2", "spdlog", "meshoptimizer")
+add_packages("glfw", "glad", "glm", "vulkansdk", "stb", "cereal", "entt", "volk", "vulkan-memory-allocator-hpp", "sol2", "spdlog", "meshoptimizer")
 
 add_syslinks("dbghelp", "dwmapi")
 

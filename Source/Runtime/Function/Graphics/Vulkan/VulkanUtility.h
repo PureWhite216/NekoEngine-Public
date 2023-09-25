@@ -8,8 +8,8 @@ namespace NekoEngine
 {
     namespace VulkanUtility
     {
-        void
-        CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer &buffer,
+        void Init();
+        void CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer &buffer,
                      VkDeviceMemory &bufferMemory, VmaAllocator allocator = nullptr,
                      VmaAllocation allocation = nullptr);
 

@@ -46,6 +46,10 @@ namespace NekoEngine
         bool Load();
         void Load(uint32_t _width, uint32_t _height, void* _data, TextureDesc _parameters = TextureDesc(), TextureLoadOptions _loadOptions = TextureLoadOptions()) override;
 
+        TextureType GetType() override
+        {
+            return TextureType::COLOUR;
+        }
 
         void* GetHandle() const override { return (void*)this; }
         const VkImageView& GetImageView() const { return imageView; }
@@ -71,7 +75,15 @@ namespace NekoEngine
         VulkanTextureDepth(uint32_t _width, uint32_t _height);
         ~VulkanTextureDepth() override;
 
+        void Init();
+        void Resize(uint32_t width, uint32_t height) override;
+
         void BuildTexture();
+
+        TextureType GetType() override
+        {
+            return TextureType::DEPTH;
+        }
 
 
         virtual void* GetHandle() const override
@@ -90,6 +102,13 @@ namespace NekoEngine
         VulkanTextureDepthArray(uint32_t width, uint32_t height, uint32_t count);
         ~VulkanTextureDepthArray() override;
 
+        TextureType GetType() override
+        {
+            return TextureType::DEPTHARRAY;
+        }
+
+        void Resize(uint32_t width, uint32_t height, uint32_t count) override;
+        void Init() override;
         VkImageView GetImageView(int index) const { return individualImageViews[index]; }
         uint32_t GetCount() const override { return count; }
 
@@ -136,6 +155,11 @@ namespace NekoEngine
         void Unbind(uint32_t slot = 0) const override {};
 
         void Load(uint32_t mips);
+
+        TextureType GetType() override
+        {
+            return TextureType::CUBE;
+        }
 
         const VkImageView& GetImageView() const { return imageView; }
         //TODO: !!! deal witch mipmaps

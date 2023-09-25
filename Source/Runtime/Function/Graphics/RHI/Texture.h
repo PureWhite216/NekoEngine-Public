@@ -47,8 +47,7 @@ namespace NekoEngine
         const uint64_t GetUUID() const { return m_UUID; }
 
         //TODO: Need to Check
-        virtual TextureType GetType()
-        { return TextureType::COLOUR; }
+        virtual TextureType GetType() = 0;
 
         virtual RHIFormat GetFormat()
         { return rhiFormat; };
@@ -149,6 +148,8 @@ namespace NekoEngine
     class TextureDepthArray : virtual public Texture
     {
     public:
+        virtual void Init()                                                  = 0;
+        virtual void Resize(uint32_t width, uint32_t height, uint32_t count) = 0;
         virtual uint32_t GetCount() const = 0;
     };
 

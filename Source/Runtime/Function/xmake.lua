@@ -1,6 +1,6 @@
 -- add_deps("Core")
 -- includes("Graphics",  "FrameWork", "Asset", "GUI", "Physics", "Script")
 target("Function")
-    add_deps("Core", "File", "OS", "ImGui", "OpenFBX")
+    add_deps("Core", "File", "OS", "ImGui", "OpenFBX", "SPIRV-Cross")
     set_kind("static")
     add_files("/**.cpp")

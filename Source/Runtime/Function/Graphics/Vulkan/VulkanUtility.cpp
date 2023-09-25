@@ -6,6 +6,23 @@
 
 namespace NekoEngine
 {
+
+    void VulkanUtility::Init()
+    {
+        fpSetDebugUtilsObjectNameEXT = (PFN_vkSetDebugUtilsObjectNameEXT)(vkGetInstanceProcAddr(GET_INSTANCE(), "vkSetDebugUtilsObjectNameEXT"));
+        if(fpSetDebugUtilsObjectNameEXT == nullptr)
+            fpSetDebugUtilsObjectNameEXT = [](VkDevice device, const VkDebugUtilsObjectNameInfoEXT* pNameInfo)
+            { return VK_SUCCESS; };
+
+        fpCmdBeginDebugUtilsLabelEXT = (PFN_vkCmdBeginDebugUtilsLabelEXT)(vkGetInstanceProcAddr(GET_INSTANCE(), "vkCmdBeginDebugUtilsLabelEXT"));
+        if(fpCmdBeginDebugUtilsLabelEXT == nullptr)
+            fpCmdBeginDebugUtilsLabelEXT = [](VkCommandBuffer commandBuffer, const VkDebugUtilsLabelEXT* pLabelInfo) {};
+
+        fpCmdEndDebugUtilsLabelEXT = (PFN_vkCmdEndDebugUtilsLabelEXT)(vkGetInstanceProcAddr(GET_INSTANCE(), "vkCmdEndDebugUtilsLabelEXT"));
+        if(fpCmdEndDebugUtilsLabelEXT == nullptr)
+            fpCmdEndDebugUtilsLabelEXT = [](VkCommandBuffer commandBuffer) {};
+    }
+
     inline VkImageMemoryBarrier ImageMemoryBarrier()
     {
         VkImageMemoryBarrier imageMemoryBarrier = {};

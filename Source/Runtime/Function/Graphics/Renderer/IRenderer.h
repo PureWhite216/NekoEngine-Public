@@ -83,7 +83,7 @@ namespace NekoEngine
 
         virtual void SetScreenBufferSize(uint32_t width, uint32_t height)
         {
-            ASSERT(width != 0 && height != 0, "Width or Height 0!");
+            // ASSERT(width == 0 || height == 0, "Width or Height 0!");
 
             m_ScreenBufferWidth = width;
             m_ScreenBufferHeight = height;

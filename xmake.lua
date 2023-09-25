@@ -3,10 +3,10 @@ set_project("NekoEngine")
 set_warnings("all")
 set_defaultarchs("windows|x64")
 set_languages("c++17")
--- set_toolset("mingw")
-
+-- set_toolchains("mingw")
+set_toolchains("msvc")
 add_rules("mode.debug", "mode.release")
-add_includedirs("/ThirdParty", "/Embedded")
+add_includedirs("/ThirdParty", "/Embedded", "/Assets")
 
 if is_mode("debug") then
     -- 添加DEBUG编译宏

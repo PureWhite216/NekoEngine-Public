@@ -1064,8 +1064,7 @@ namespace NekoEngine
 
         if(m_ForwardData.m_DepthTest)
         {
-            gEngine->GetRenderer()->ClearRenderTarget(reinterpret_cast<Texture*>(m_ForwardData.m_DepthTexture),
-                                                      GET_SWAP_CHAIN()->GetCurrentCommandBuffer());
+            gEngine->GetRenderer()->ClearRenderTarget(dynamic_cast<Texture*>(m_ForwardData.m_DepthTexture), GET_SWAP_CHAIN()->GetCurrentCommandBuffer());
         }
 
         GenerateBRDFLUTPass();

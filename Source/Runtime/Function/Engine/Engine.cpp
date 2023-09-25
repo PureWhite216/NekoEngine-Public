@@ -103,6 +103,8 @@ namespace NekoEngine
     {
         LOG("Engine Init.");
 
+        timeStep = MakeUnique<TimeStep>();
+
         // Init LevelManager
         levelManager = MakeUnique<LevelManager>();
         LOG("Level Manager Init.");
@@ -165,7 +167,7 @@ namespace NekoEngine
 
         // Create Renderer
         renderer = MakeUnique<VulkanRenderer>();
-        renderer->Init();
+        renderer->Init(false);
         LOG("Renderer Init.");
 
         // Create System Manager

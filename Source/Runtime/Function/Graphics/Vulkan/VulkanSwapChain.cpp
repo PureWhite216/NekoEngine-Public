@@ -6,6 +6,8 @@
 #include "VulkanContext.h"
 #include "Engine.h"
 #include "VulkanRenderer.h"
+#include "VulkanUtility.h"
+
 namespace NekoEngine
 {
     VulkanSwapChain::VulkanSwapChain(uint32_t _width, uint32_t _height) : width(_width), height(_height)
@@ -182,7 +184,9 @@ namespace NekoEngine
             {
                 bufferData[i].CommandPool = MakeShared<VulkanCommandPool>(gVulkanContext.GetDevice()->GetPhysicalDevice()->GetGraphicsFamilyIndex(), VK_COMMAND_POOL_CREATE_TRANSIENT_BIT | VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT);
                 bufferData[i].MainCommandBuffer = MakeShared<VulkanCommandBuffer>();
-
+                bufferData[i].MainCommandBuffer->Init(true, bufferData[i].CommandPool->GetHandle());
+                //TODO: set format
+//                VulkanUtility::SetDebugUtilsObjectName(GET_DEVICE(), VK_OBJECT_TYPE_COMMAND_BUFFER, fmt::format("Commandbuffer (frame in flight: {})", i), m_Frames[i].MainCommandBuffer->GetHandle());
             }
         }
     }

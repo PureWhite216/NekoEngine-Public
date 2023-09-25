@@ -224,7 +224,7 @@ namespace NekoEngine
 
         volkLoadInstance(vkInstance);
 
-//        VulkanUtility::Init();
+        VulkanUtility::Init();
     }
 
     size_t VulkanContext::GetMinUniformBufferOffsetAlignment() const

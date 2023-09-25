@@ -237,8 +237,7 @@ namespace NekoEngine
                 }
             }
 
-            vkUpdateDescriptorSets(GET_DEVICE(), descriptorWritesCount,
-                                   m_WriteDescriptorSetPool.data(), 0, nullptr);
+            vkUpdateDescriptorSets(GET_DEVICE(), descriptorWritesCount, m_WriteDescriptorSetPool.data(), 0, nullptr);
 
             m_DescriptorUpdated[currentFrame] = true;
         }

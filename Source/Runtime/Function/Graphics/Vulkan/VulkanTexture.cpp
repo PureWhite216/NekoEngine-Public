@@ -543,6 +543,56 @@ namespace NekoEngine
         FreeResources();
     }
 
+    void VulkanTextureDepth::Resize(uint32_t _width, uint32_t _height)
+    {
+        width  = _width;
+        height = _height;
+        Handle   = UUID();
+
+        DeletionQueue& deletionQueue = VulkanRenderer::GetCurrentDeletionQueue();
+
+        auto tSampler   = sampler;
+        auto tImageView = imageView;
+
+        deletionQueue.Push([tSampler, tImageView]
+                                   {
+                                       vkDestroySampler(GET_DEVICE(), tSampler, nullptr);
+                                       vkDestroyImageView(GET_DEVICE(), tImageView, nullptr); });
+
+        auto textureImage = image;
+        auto alloc        = allocation;
+
+        deletionQueue.Push([textureImage, alloc]
+                                   { vmaDestroyImage(gVulkanContext.GetDevice()->GetAllocator(), textureImage, alloc); });
+
+        image = VkImage();
+
+        Init();
+    }
+
+    void VulkanTextureDepth::Init()
+    {
+        VkFormat depthFormat = VulkanUtility::FindDepthFormat();
+        vkFormat           = depthFormat;
+        rhiFormat             = VulkanUtility::VKToFormat(depthFormat);
+
+        CreateImage(width, height, 1, vkFormat, VK_IMAGE_TYPE_2D, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, image, imageMemory, 1, 0, allocation);
+
+        imageView = CreateImageView(image, vkFormat, 1, VK_IMAGE_VIEW_TYPE_2D, VK_IMAGE_ASPECT_DEPTH_BIT, 1);
+
+        VulkanUtility::TransitionImageLayout(image, vkFormat, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+
+        imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+        sampler = CreateTextureSampler(VK_FILTER_LINEAR, VK_FILTER_LINEAR, 0.0f, 1.0f, false, gVulkanContext.GetDevice()->GetPhysicalDevice()->GetProperties().limits.maxSamplerAnisotropy, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE);
+
+        flags |= TextureFlags::Texture_DepthStencil;
+
+        UpdateDescriptor();
+
+        m_UUID = Random64::Rand(0, std::numeric_limits<uint64_t>::max());
+    }
+
     void VulkanTextureDepth::BuildTexture()
     {
         CreateImage(width, height, 1, vkFormat, VK_IMAGE_TYPE_2D, VK_IMAGE_TILING_OPTIMAL,
@@ -582,7 +632,68 @@ namespace NekoEngine
 
     }
 
-    void VulkanTextureDepthArray::BuildTexture()
+    void VulkanTextureDepthArray::Resize(uint32_t _width, uint32_t _height, uint32_t _count)
+    {
+        width  = _width;
+        height = _height;
+        count = _count;
+        Handle   = UUID();
+
+        DeletionQueue& deletionQueue = VulkanRenderer::GetCurrentDeletionQueue();
+
+        auto tSampler   = sampler;
+        auto tImageView = imageView;
+        auto tImageViews = individualImageViews;
+
+        deletionQueue.Push([tSampler, tImageView, tImageViews]
+                           {
+                               vkDestroySampler(GET_DEVICE(), tSampler, nullptr);
+                               vkDestroyImageView(GET_DEVICE(), tImageView, nullptr);
+                               for(uint32_t i = 0; i < (uint32_t)tImageViews.size(); i++)
+                               {
+                                   vkDestroyImageView(GET_DEVICE(), tImageViews[i], nullptr);
+                               }
+                           });
+
+        auto textureImage = image;
+        auto alloc        = allocation;
+
+        deletionQueue.Push([textureImage, alloc]
+                           { vmaDestroyImage(gVulkanContext.GetDevice()->GetAllocator(), textureImage, alloc); });
+
+        image = VkImage();
+
+        Init();
+    }
+
+    void VulkanTextureDepthArray::Init()
+    {
+        flags |= TextureFlags::Texture_DepthStencil;
+        vkFormat           = VK_FORMAT_D32_SFLOAT;
+        rhiFormat             = VulkanUtility::VKToFormat(vkFormat);
+
+        CreateImage(width, height, 1, vkFormat, VK_IMAGE_TYPE_2D, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, image, imageMemory, count, 0, allocation);
+
+        imageView = CreateImageView(image, vkFormat, 1, VK_IMAGE_VIEW_TYPE_2D, VK_IMAGE_ASPECT_DEPTH_BIT, count);
+
+        for(uint32_t i = 0; i < count; i++)
+        {
+            VkImageView imageView = CreateImageView(image, vkFormat, 1, VK_IMAGE_VIEW_TYPE_2D_ARRAY, VK_IMAGE_ASPECT_DEPTH_BIT, 1, i);
+            individualImageViews.push_back(imageView);
+        }
+
+        VulkanUtility::TransitionImageLayout(image, vkFormat, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL, 1, count);
+
+        imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+        sampler = CreateTextureSampler();
+
+        m_UUID = Random64::Rand(0, std::numeric_limits<uint64_t>::max());
+
+        UpdateDescriptor();
+    }
+
+    void VulkanTextureDepthArray::BuildTexture() ///////
     {
         CreateImage(width, height, 1, vkFormat, VK_IMAGE_TYPE_2D, VK_IMAGE_TILING_OPTIMAL,
                     VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,

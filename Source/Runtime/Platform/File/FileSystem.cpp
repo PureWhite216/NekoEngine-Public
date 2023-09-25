@@ -24,10 +24,8 @@ namespace NekoEngine
 
     static HANDLE OpenFileForReading(const std::string &path)
     {
-        auto t = StringToWString(path).c_str();
-        auto t1 = reinterpret_cast<LPCSTR>(t);
-        return CreateFile(reinterpret_cast<LPCSTR>(t), GENERIC_READ, FILE_SHARE_READ,
-                          nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, NULL);
+        return CreateFileW(StringToWString(path).c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, NULL);
+
     }
 
     static int64_t GetFileSizeInternal(const HANDLE file)

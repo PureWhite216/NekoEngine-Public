@@ -1,3 +1,3 @@
 add_includedirs("ImGui/")
-includes("ImGui", "OpenFBX")
+includes("ImGui", "OpenFBX", "SPIRV-Cross")
 

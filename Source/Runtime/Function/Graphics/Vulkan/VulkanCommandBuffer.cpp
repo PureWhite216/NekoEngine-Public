@@ -5,6 +5,7 @@
 #include "VulkanDevice.h"
 #include "VulkanPipeline.h"
 #include "VulkanContext.h"
+#include "VulkanInitializer.h"
 
 namespace NekoEngine
 {
@@ -31,6 +32,25 @@ namespace NekoEngine
         fence = MakeShared<VulkanFence>(true);
 
         return  true;
+    }
+
+    bool VulkanCommandBuffer::Init(bool _isPrimary, VkCommandPool _commandPool)
+    {
+        isPrimary = _isPrimary;
+        commandPool = _commandPool;
+
+        VkCommandBufferAllocateInfo cmdBufferCreateInfo = VKInitialisers::CommandBufferAllocateInfo(commandPool, isPrimary ? VK_COMMAND_BUFFER_LEVEL_PRIMARY : VK_COMMAND_BUFFER_LEVEL_SECONDARY, 1);
+
+        VK_CHECK_RESULT(vkAllocateCommandBuffers(GET_DEVICE(), &cmdBufferCreateInfo, &handle), "failed to allocate command buffer!");
+
+        VkSemaphoreCreateInfo semaphoreInfo = {};
+        semaphoreInfo.sType                 = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+        semaphoreInfo.pNext                 = nullptr;
+
+        VK_CHECK_RESULT(vkCreateSemaphore(GET_DEVICE(), &semaphoreInfo, nullptr, &semaphore), "failed to create semaphore!");
+        fence = MakeShared<VulkanFence>(true);
+
+        return true;
     }
 
     void VulkanCommandBuffer::BeginRecording()

@@ -44,7 +44,7 @@ namespace NekoEngine
 
     void SetTitleBarColour(const glm::vec4& colour, bool dark = true)
     {
-        HWND hwnd = glfwGetWin32Window(static_cast<GLFWwindow*>(Window::instance->GetHandle()));
+        HWND hwnd = glfwGetWin32Window(static_cast<GLFWwindow*>(gEngine->GetWindow()->GetHandle()));
 
         COLORREF col = RGB(colour.x * 255, colour.y * 255, colour.z * 255);
 
@@ -2232,11 +2232,6 @@ namespace NekoEngine
 
         bool isProfiling       = false;
         static bool firstFrame = true;
-#if NekoEngine_PROFILE
-        isProfiling = tracy::GetProfiler().IsConnected();
-#endif
-        if(!isProfiling && m_Settings.m_SleepOutofFocus && !gEngine->GetWindow()->GetWindowFocus() && m_EditorState != EditorState::Play && !firstFrame)
-            OS::Instance()->Delay(1000000);
 
         Engine::OnRender();
 

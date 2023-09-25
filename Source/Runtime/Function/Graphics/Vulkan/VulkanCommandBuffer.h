@@ -37,6 +37,7 @@ namespace NekoEngine
         ~VulkanCommandBuffer();
 
         bool Init(bool _isPrimary) override;
+        bool Init(bool _isPrimary, VkCommandPool commandPool);
         void Unload() override;
         void BeginRecording() override;
         void BeginRecordingSecondary(RenderPass* renderPass, Framebuffer* framebuffer) override;

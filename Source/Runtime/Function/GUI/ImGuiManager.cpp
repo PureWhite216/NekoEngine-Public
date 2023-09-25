@@ -62,7 +62,7 @@ namespace NekoEngine
 
         if(m_IMGUIRenderer && m_IMGUIRenderer->Implemented())
         {
-//            m_IMGUIRenderer->NewFrame();
+           m_IMGUIRenderer->NewFrame();
         }
 
         ImGuizmo::BeginFrame();

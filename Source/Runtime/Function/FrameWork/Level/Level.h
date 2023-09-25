@@ -16,15 +16,15 @@ namespace NekoEngine
     {
         bool Renderer2DEnabled         = true;
         bool Renderer3DEnabled         = true;
-        bool DebugRenderEnabled        = true;
-        bool SkyboxRenderEnabled       = true;
+        bool DebugRenderEnabled        = false;
+        bool SkyboxRenderEnabled       = false;
         bool ShadowsEnabled            = true;
-        bool FXAAEnabled               = true;
-        bool DebandingEnabled          = true;
+        bool FXAAEnabled               = false;
+        bool DebandingEnabled          = false;
         bool ChromaticAberationEnabled = false;
         bool EyeAdaptation             = false;
         bool SSAOEnabled               = false;
-        bool BloomEnabled              = true;
+        bool BloomEnabled              = false;
         bool FilmicGrainEnabled        = false;
         bool MotionBlurEnabled         = false;
         bool DepthOfFieldEnabled       = false;

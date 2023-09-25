@@ -29,6 +29,7 @@ namespace NekoEngine
         void Render(CommandBuffer* commandBuffer) override;
         void OnResize(uint32_t width, uint32_t height) override;
         void Clear() override;
+        void NewFrame() override {};
 
         void FrameRender(ImGui_ImplVulkanH_Window* wd);
         void SetupVulkanWindowData(ImGui_ImplVulkanH_Window* wd, VkSurfaceKHR surface, int width, int height);

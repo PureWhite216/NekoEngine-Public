@@ -8,9 +8,8 @@
 #include "VulkanDevice.h"
 #include "VulkanCommandBuffer.h"
 #include "VulkanContext.h"
-#include "spirv_cross/spirv_cross.hpp"
 #include "VulkanInitializer.h"
-
+#include "SPIRV-Cross/spirv_cross.hpp"
 
 namespace NekoEngine
 {
@@ -529,6 +528,10 @@ namespace NekoEngine
                     type = ShaderType::UNKNOWN;
                 }
             }
+            else if(type != ShaderType::UNKNOWN)
+            {
+                shaders->at(type).append(lines[i]);
+            }
         }
     }
 
@@ -749,7 +752,7 @@ namespace NekoEngine
     {
         stageCount = 0;
         pipelineLayout = VK_NULL_HANDLE;
-        shaderStageInfo = nullptr;
+        shaderStageInfo = new VkPipelineShaderStageCreateInfo[stageCount];
         name = "";
         shaderTypes = {ShaderType::VERTEX, ShaderType::FRAGMENT};
         stageCount = 2;
