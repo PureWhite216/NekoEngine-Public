@@ -213,6 +213,7 @@ namespace NekoEngine
         indexingFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES_EXT;
         indexingFeatures.runtimeDescriptorArray = VK_TRUE;
         indexingFeatures.descriptorBindingVariableDescriptorCount = VK_TRUE;
+        indexingFeatures.descriptorBindingPartiallyBound = VK_TRUE;
 
         // Create Device
         VkDeviceCreateInfo deviceCreateInfo = {};
