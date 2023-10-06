@@ -101,7 +101,7 @@ namespace NekoEngine
 
     void VulkanRenderer::ClearRenderTarget(Texture* texture, CommandBuffer* commandBuffer, Color clearColour)
     {
-        VkImageSubresourceRange subresourceRange = {}; // TODO: Get from texture
+        VkImageSubresourceRange subresourceRange = {};
         subresourceRange.baseMipLevel = 0;
         subresourceRange.layerCount = 1;
         subresourceRange.levelCount = 1;
@@ -127,7 +127,7 @@ namespace NekoEngine
             VkClearDepthStencilValue clear_depth_stencil = {1.0f, 1};
 
             subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
-            (dynamic_cast<VulkanTexture2D*>(texture))->TransitionImage(VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+            (dynamic_cast<VulkanTextureDepth*>(texture))->TransitionImage(VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                                                                        (VulkanCommandBuffer*) commandBuffer);
             vkCmdClearDepthStencilImage(((VulkanCommandBuffer*) commandBuffer)->GetHandle(),
                                         dynamic_cast<VulkanTextureDepth*>(texture)->GetImage(),

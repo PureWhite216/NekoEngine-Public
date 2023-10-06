@@ -11,7 +11,7 @@ namespace NekoEngine
     VkFormat ConvertRHIFormat2VkFormat(RHIFormat format, bool isSRGB);
     VkFilter ConvertRHIFilter2VkFilter(const TextureFilter filter);
 
-    class VulkanTexture2D : virtual public Texture2D
+    class VulkanTexture2D : public Texture2D
     {
     protected:
         VkImage image = VK_NULL_HANDLE;
@@ -68,49 +68,86 @@ namespace NekoEngine
 
     };
 
-    class VulkanTextureDepth : public VulkanTexture2D, public TextureDepth
+    class VulkanTextureDepth : public TextureDepth
     {
+    private:
+        VkImage image = VK_NULL_HANDLE;
+        VkImageLayout imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;;
+        VkImageView imageView = VK_NULL_HANDLE;
+        VkFormat vkFormat = VK_FORMAT_R8G8B8A8_UNORM;
+        VkSampler sampler = VK_NULL_HANDLE;
+        VkDeviceMemory imageMemory = VK_NULL_HANDLE;
+        VkDescriptorImageInfo descriptor = {};
+        HashMap<uint32_t, VkImageView> mipMaps;
+        VulkanBuffer* stagingBuffer = nullptr;
+        VmaAllocation allocation = VK_NULL_HANDLE;
+        bool isDeleteImage;
     public:
-        VulkanTextureDepth() = default;
         VulkanTextureDepth(uint32_t _width, uint32_t _height);
         ~VulkanTextureDepth() override;
 
-        void Init();
+        void Bind(uint32_t slot = 0) const override {};
+        void Unbind(uint32_t slot = 0) const override {};
         void Resize(uint32_t width, uint32_t height) override;
 
         void BuildTexture();
+        void UpdateDescriptor();
+        void TransitionImage(VkImageLayout newLayout, VulkanCommandBuffer* commandBuffer = nullptr);
 
-        TextureType GetType() override
-        {
-            return TextureType::DEPTH;
-        }
-
-
-        virtual void* GetHandle() const override
-        {
-            return (void*)this;
-        }
+        void* GetHandle() const override { return (void*)this; }
+        const VkImageView& GetImageView() const { return imageView; }
+        const VkSampler& GetSampler() const { return sampler; }
+        const VkDescriptorImageInfo* GetDescriptor() const { return &descriptor; }
+        const VkImage& GetImage() const { return image; }
+        const VkFormat& GetVkFormat() const { return vkFormat; }
+        const VkImageLayout& GetImageLayout() const { return imageLayout; }
+        const VmaAllocation& GetAllocation() const { return allocation; }
 
     };
 
-    class VulkanTextureDepthArray : public TextureDepthArray, public VulkanTextureDepth
+    class VulkanTextureDepthArray : public TextureDepthArray
     {
     private:
-        int count;
         ArrayList<VkImageView> individualImageViews;
+        VkImageView imageView = VK_NULL_HANDLE;
+        VkImage image = VK_NULL_HANDLE;
+        VkImageLayout imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;;
+        VkFormat vkFormat = VK_FORMAT_R8G8B8A8_UNORM;
+        VkSampler sampler = VK_NULL_HANDLE;
+        VkDeviceMemory imageMemory = VK_NULL_HANDLE;
+        VkDescriptorImageInfo descriptor = {};
+        HashMap<uint32_t, VkImageView> mipMaps;
+        VulkanBuffer* stagingBuffer = nullptr;
+        VmaAllocation allocation = VK_NULL_HANDLE;
+        bool isDeleteImage;
+
     public:
         VulkanTextureDepthArray(uint32_t width, uint32_t height, uint32_t count);
         ~VulkanTextureDepthArray() override;
+
+        void Bind(uint32_t slot = 0) const override {};
+        void Unbind(uint32_t slot = 0) const override {};
+        void Resize(uint32_t width, uint32_t height, uint32_t count) override;
+
+        void UpdateDescriptor();
+        void TransitionImage(VkImageLayout newLayout, VulkanCommandBuffer* commandBuffer = nullptr);
 
         TextureType GetType() override
         {
             return TextureType::DEPTHARRAY;
         }
 
-        void Resize(uint32_t width, uint32_t height, uint32_t count) override;
-        void Init() override;
         VkImageView GetImageView(int index) const { return individualImageViews[index]; }
         uint32_t GetCount() const override { return count; }
+
+        void* GetHandle() const override { return (void*)this; }
+        const VkImageView& GetImageView() const { return imageView; }
+        const VkSampler& GetSampler() const { return sampler; }
+        const VkDescriptorImageInfo* GetDescriptor() const { return &descriptor; }
+        const VkImage& GetImage() const { return image; }
+        const VkFormat& GetVkFormat() const { return vkFormat; }
+        const VkImageLayout& GetImageLayout() const { return imageLayout; }
+        const VmaAllocation& GetAllocation() const { return allocation; }
 
         void BuildTexture();
     };

@@ -47,7 +47,7 @@ namespace NekoEngine
         const uint64_t GetUUID() const { return m_UUID; }
 
         //TODO: Need to Check
-        virtual TextureType GetType() = 0;
+        virtual TextureType GetType() { return TextureType::COLOUR; };
 
         virtual RHIFormat GetFormat()
         { return rhiFormat; };
@@ -140,15 +140,49 @@ namespace NekoEngine
     };
 
 
-    class TextureDepth : virtual public Texture2D
+    class TextureDepth : public Texture
     {
+    protected:
+        uint32_t width = 0;
+        uint32_t height = 0;
 
+    public:
+        virtual void Resize(uint32_t width, uint32_t height) = 0;
+
+        inline uint32_t GetWidth(uint32_t mip) const override
+        {
+            return width >> mip;
+        }
+
+        inline uint32_t GetHeight(uint32_t mip) const override
+        {
+            return height >> mip;
+        }
+
+        virtual void* GetHandle() const override
+        {
+            return (void*)this;
+        }
+
+
+        TextureType GetType()  override
+        {
+            return TextureType::DEPTH;
+        }
+
+        RHIFormat GetFormat()  override
+        {
+            return rhiFormat;
+        }
     };
 
     class TextureDepthArray : virtual public Texture
     {
+    protected:
+        uint32_t width = 0;
+        uint32_t height = 0;
+        uint32_t count = 0;
     public:
-        virtual void Init()                                                  = 0;
         virtual void Resize(uint32_t width, uint32_t height, uint32_t count) = 0;
         virtual uint32_t GetCount() const = 0;
     };
